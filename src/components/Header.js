@@ -1,7 +1,10 @@
 import logo from '../assets/logo.jpg'
 import Button from './UI/Button'
+import { useCartContext } from '../store/CartContext'
 
 const Header = () => {
+    const { cart } = useCartContext()
+
     return (
         <header id="main-header">
             <div id="title">
@@ -10,7 +13,7 @@ const Header = () => {
             </div>
             <nav>
             <Button textOnly={true}>
-                Cart (0)
+                Cart ({cart.items.length})
             </Button>
             </nav>
         </header>
