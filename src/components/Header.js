@@ -3,7 +3,55 @@ import Button from './UI/Button'
 import { useCartContext } from '../store/CartContext'
 
 const Header = () => {
-    const { cart } = useCartContext()
+    const { cart, dispatch } = useCartContext()
+
+    const emptyCartModal = () => {
+        dispatch({type: "MODAL_SET_CONTENT", payload:
+            <div className='cart'>
+                <h2>Your cart is empty.</h2>
+                <div className='modal-actions'>
+                    <Button textOnly={false} onClick={() => dispatch({type: "MODAL_CLOSE"})}>
+                        Close
+                    </Button>
+                </div>
+            </div>
+        })
+        dispatch({type: "MODAL_OPEN"})
+    }
+
+    const fullCartModal = () => {
+        dispatch({type: "MODAL_SET_CONTENT", payload:
+            <div className='cart'>
+                <h2>Your cart</h2>
+                <ul>
+                    {cart.items.map(item => (
+                        <li key={item.id} className='cart-item'>
+                            <p>{item.name} - {item.quantity}</p>
+                        </li>
+                    ))}
+                </ul>
+                <div className='cart-total'>
+                    {
+                        new Intl.NumberFormat("et-ET", { style: "currency", currency: "EUR" }).format(
+                            cart.items.reduce((total, item) => total + item.price * item.quantity, 0),
+                        )
+                    }
+                </div>
+                <div className='modal-actions'>
+                    <Button textOnly={true} onClick={() => dispatch({type: "MODAL_CLOSE"})}>
+                        Close
+                    </Button>
+                    <Button textOnly={false} onClick={() => {
+                            dispatch({type: "MODAL_CLOSE"})
+                            dispatch({type: "CLEAR_CART"})
+                        }}>
+                        Checkout
+                    </Button>
+                </div>
+            </div>
+        })
+        dispatch({type: "MODAL_OPEN"})
+    }
 
     return (
         <header id="main-header">
@@ -12,7 +60,7 @@ const Header = () => {
                 <h1>React Food Order App</h1>
             </div>
             <nav>
-            <Button textOnly={true}>
+            <Button textOnly={true} onClick={cart.items.length === 0 ? emptyCartModal : fullCartModal}>
                 Cart ({cart.items.length})
             </Button>
             </nav>
