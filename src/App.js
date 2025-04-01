@@ -1,14 +1,16 @@
-import Header from './components/Header';
+import Header from "./components/Header";
 import Meals from "./components/Meals";
-import { CartContextProvider } from './store/CartContext';
+import { CartContextProvider } from "./store/CartContext";
+
+//Reducer istub context's. Pole mõtet App.js'i reostada.
 
 const App = () => {
- return (
+  return (
     <CartContextProvider>
-     <Header/>
-     <Meals/>
+      <Header />
+      <Meals />
     </CartContextProvider>
   );
-}
+};
 
 export default App;
